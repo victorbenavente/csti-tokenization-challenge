@@ -28,7 +28,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth(
       {
-        description: `[just text field] Please enter token in following format: Bearer pk_test_<token>`,
+        description: `Please enter token in following format: Bearer pk_test_<token>`,
         name: 'Authorization',
         bearerFormat: 'Bearer',
         scheme: 'Bearer',

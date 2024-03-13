@@ -10,7 +10,6 @@ data:
   JWT_SECRET: "fFBiuF2mnTj3Noq8UCLqYq7lTV8pJp2oJxbYLiR5es"
   REDIS_HOST: "redis-svc"
   REDIS_PORT: "6379"
-  REDIS_PASSWORD: "ROOT"
 
 ---
 apiVersion: apps/v1
@@ -31,7 +30,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: tokenization-api
-          image: victor0141/csti-tokenization-nodejs-backend:1.0
+          image: victor0141/csti-tokenization-nodejs-backend:1.1
           imagePullPolicy: Always
           env:
             - name: NODE_ENV

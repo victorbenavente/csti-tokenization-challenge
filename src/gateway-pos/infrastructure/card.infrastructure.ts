@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { RedisClient } from './db/redis.client';
 import { CardRepository } from '../domain/repositories/card.repository';
 import { CreateTokenEntity } from '../domain/entities/create-token.entity';
@@ -21,6 +21,9 @@ export class CardInfrastructure implements CardRepository {
 
   async getCard(token: string): Promise<CardEntity> {
     const card = await this.redisClient.adapter.get(token);
+    if (!card) {
+      throw new NotFoundException('Card not found');
+    }
     return plainToInstance(CardEntity, JSON.parse(card));
   }
 }
