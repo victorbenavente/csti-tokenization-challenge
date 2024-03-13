@@ -10,7 +10,7 @@ export class JwtService {
     private readonly configService: ConfigService,
   ) {}
 
-  createToken(data: CreateTokenEntity) {
+  createToken(data: CreateTokenEntity): string {
     const { email, card_number } = data;
     return this.nestJwtService.sign(
       { email, card_number },

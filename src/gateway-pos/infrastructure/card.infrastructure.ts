@@ -12,15 +12,13 @@ export class CardInfrastructure implements CardRepository {
   constructor(private readonly redisClient: RedisClient) {}
 
   async saveCard(token: string, data: CreateTokenEntity): Promise<boolean> {
-    return this.redisClient.adapter.set(
-      token,
-      JSON.stringify(data),
-      this.TTL_IN_MILIS,
-    );
+    return this.redisClient
+      .getAdapter()
+      .set(token, JSON.stringify(data), this.TTL_IN_MILIS);
   }
 
   async getCard(token: string): Promise<CardEntity> {
-    const card = await this.redisClient.adapter.get(token);
+    const card = await this.redisClient.getAdapter().get(token);
     if (!card) {
       throw new NotFoundException('Card not found');
     }

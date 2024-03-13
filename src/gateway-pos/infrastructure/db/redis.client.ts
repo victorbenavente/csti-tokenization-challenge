@@ -18,7 +18,7 @@ export class RedisClient implements OnModuleInit {
       throw error;
     });
   }
-  get adapter(): Keyv {
+  public getAdapter(): Keyv {
     return this.redis;
   }
 }
