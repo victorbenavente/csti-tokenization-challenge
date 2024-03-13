@@ -17,5 +17,5 @@ export const envSettings: EnvSettings = {
   JWT_SECRET: Joi.string().required(),
   REDIS_HOST: Joi.string().required(),
   REDIS_PORT: Joi.number().required(),
-  REDIS_PASSWORD: Joi.string().required(),
+  REDIS_PASSWORD: Joi.string().optional(),
 };

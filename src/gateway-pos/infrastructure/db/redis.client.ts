@@ -11,7 +11,7 @@ export class RedisClient implements OnModuleInit {
 
   onModuleInit() {
     const { host, port, password } = this.envConfig.redis;
-    this.redis = new Keyv(`redis://:${password}@${host}:${port}/0`);
+    this.redis = new Keyv(`redis://:${password || ''}@${host}:${port}/0`);
 
     this.redis.on('error', (error) => {
       this.logger.error('Fail to connect with Redis');
