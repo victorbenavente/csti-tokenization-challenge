@@ -2,7 +2,7 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
@@ -18,22 +18,23 @@ export class TokenGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
-    const cardToken = req.headers.token;
-    this.verifyMerchantToken(cardToken);
+    const creditCardToken = req.headers.token;
+    if (!creditCardToken) {
+      throw new BadRequestException('Header "token" is missing');
+    }
 
-    return true;
+    return this.verifyCardToken(creditCardToken);
   }
 
-  private verifyMerchantToken(cardToken: string): any {
+  private verifyCardToken(cardToken: string): boolean {
     try {
       const { jwtSecret } = this.configService.app;
       const validTolen = this.nestJwtService.verify(cardToken, {
-        algorithms: ['HS256'],
         secret: jwtSecret,
       });
-      return validTolen;
+      return !!validTolen;
     } catch (error) {
-      throw new UnauthorizedException('Invalid Merchant Token');
+      throw new BadRequestException('Invalid credit card token');
     }
   }
 }

@@ -4,6 +4,7 @@ import { JwtService } from './services/jwt.service';
 import { plainToInstance } from 'class-transformer';
 import { TokenEntity } from '../domain/entities/token.entity';
 import { CreateTokenEntity } from '../domain/entities/create-token.entity';
+import { CardEntity } from '../domain/entities/card.entity';
 
 @Injectable()
 export class CardApplication {
@@ -17,5 +18,9 @@ export class CardApplication {
     return this.cardRepository
       .saveCard(jwt, data)
       .then(() => plainToInstance(TokenEntity, { token: jwt }));
+  }
+
+  async getCardInformation(token: string): Promise<CardEntity> {
+    return this.cardRepository.getCard(token);
   }
 }
