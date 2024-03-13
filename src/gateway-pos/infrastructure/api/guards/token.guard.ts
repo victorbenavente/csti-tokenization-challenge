@@ -4,12 +4,16 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { ConfigService } from '../../../../settings/config/config.service';
 
 @Injectable()
 export class TokenGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly nestJwtService: NestJwtService,
+    private readonly configService: ConfigService,
+  ) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -22,8 +26,10 @@ export class TokenGuard implements CanActivate {
 
   private verifyMerchantToken(cardToken: string): any {
     try {
-      const validTolen = this.jwtService.verify(cardToken, {
+      const { jwtSecret } = this.configService.app;
+      const validTolen = this.nestJwtService.verify(cardToken, {
         algorithms: ['HS256'],
+        secret: jwtSecret,
       });
       return validTolen;
     } catch (error) {
