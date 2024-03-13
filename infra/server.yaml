@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tokenization-api-configmap
+  namespace: culqi-tokenization
+data:
+  NODE_ENV: "development"
+  PORT: "3000"
+  JWT_EXPIRATION_TIME: "30s"
+  JWT_SECRET: "fFBiuF2mnTj3Noq8UCLqYq7lTV8pJp2oJxbYLiR5es"
+  REDIS_HOST: "redis-svc"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: "ROOT"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tokenization-api-deploy
+  namespace: culqi-tokenization
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tokenization-api
+  template:
+    metadata:
+      labels:
+        app: tokenization-api
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: tokenization-api
+          image: victor0141/csti-tokenization-nodejs-backend:1.0
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: NODE_ENV
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: PORT
+            - name: JWT_EXPIRATION_TIME
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: JWT_EXPIRATION_TIME
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: JWT_SECRET
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: tokenization-api-configmap
+                  key: REDIS_PORT
+
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi" # max RAM = 512 Mb
+              cpu: "300m" # max CPU-Cores = 0.3 GB
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tokenization-api-svc
+  namespace: culqi-tokenization
+spec:
+  selector:
+    app: tokenization-api
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-control
+  namespace: culqi-tokenization
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "tokenization-api-svc"
+                port:
+                  number: 80
