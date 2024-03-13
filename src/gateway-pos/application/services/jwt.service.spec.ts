@@ -2,11 +2,11 @@ import { JwtService } from './jwt.service';
 import {
   buildConfigServiceMock,
   buildNestJwtServiceMock,
-} from '../../infrastructure/test/providers.mock';
+} from '../../../common/test-utils/providers.mock';
 import {
   createTokenMock,
   tokenMock,
-} from '../../infrastructure/test/mocks/entities.mock';
+} from '../../../common/test-utils/mocks/entities.mock';
 
 describe('JwtService', () => {
   let service: JwtService;

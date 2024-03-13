@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { ConfigService } from '../../../../settings/config/config.service';
+import { ConfigService } from '../../../../common/config/config.service';
 
 @Injectable()
 export class TokenGuard implements CanActivate {

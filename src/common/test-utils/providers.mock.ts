@@ -1,8 +1,10 @@
-import { JwtService } from '../../application/services/jwt.service';
+import { JwtService } from '../../gateway-pos/application/services/jwt.service';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { CardRepository } from '../../domain/repositories/card.repository';
-import { ConfigService } from '../../../settings/config/config.service';
-import { RedisClient } from '../db/redis.client';
+import { CardRepository } from '../../gateway-pos/domain/repositories/card.repository';
+import { ConfigService } from '../config/config.service';
+import { RedisClient } from '../../gateway-pos/infrastructure/db/redis.client';
+import { CardApplication } from '../../gateway-pos/application/card.application';
+import { cardMock, tokenMock } from './mocks/entities.mock';
 
 export const buildCardRepositoryMock = () => {
   const repository = jest.mocked<CardRepository>(CardRepository as any, {
@@ -58,4 +60,22 @@ export const buildConfigServiceMock = () => {
     password: 'fakePwd',
   };
   return service;
+};
+
+export const buildCardApplicationMock = () => {
+  const application = jest.mocked<CardApplication>(CardApplication as any, {
+    shallow: true,
+  });
+  application.getCardInformation = jest.fn();
+  application.signIn = jest.fn();
+  return application;
+};
+
+export const buildCardApplicationMockForE2E = () => {
+  const application = jest.mocked<CardApplication>(CardApplication as any, {
+    shallow: true,
+  });
+  application.getCardInformation = jest.fn().mockResolvedValue(cardMock);
+  application.signIn = jest.fn().mockResolvedValue(tokenMock);
+  return application;
 };

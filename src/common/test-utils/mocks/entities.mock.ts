@@ -1,6 +1,6 @@
-import { CardEntity } from '../../../domain/entities/card.entity';
-import { CreateTokenEntity } from '../../../domain/entities/create-token.entity';
-import { TokenEntity } from '../../../domain/entities/token.entity';
+import { CardEntity } from '../../../gateway-pos/domain/entities/card.entity';
+import { CreateTokenEntity } from '../../../gateway-pos/domain/entities/create-token.entity';
+import { TokenEntity } from '../../../gateway-pos/domain/entities/token.entity';
 
 export const cardMock: CardEntity = {
   card_number: '4557880669569760',

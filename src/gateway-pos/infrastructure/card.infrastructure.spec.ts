@@ -1,6 +1,9 @@
 import { CardInfrastructure } from './card.infrastructure';
-import { buildRedisClientMock } from './test/providers.mock';
-import { createTokenMock, tokenMock } from './test/mocks/entities.mock';
+import { buildRedisClientMock } from '../../common/test-utils/providers.mock';
+import {
+  createTokenMock,
+  tokenMock,
+} from '../../common/test-utils/mocks/entities.mock';
 
 describe('CardInfrastructure', () => {
   let infrastructure: CardInfrastructure;

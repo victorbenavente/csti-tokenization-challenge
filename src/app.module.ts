@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GatewayPosModule } from './gateway-pos/gateway-pos.module';
 import * as Joi from 'joi';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { EnvSettings, envSettings } from './settings/config/config';
+import { EnvSettings, envSettings } from './common/config/config';
 
 @Module({
   imports: [

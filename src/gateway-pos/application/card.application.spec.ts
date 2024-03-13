@@ -2,12 +2,12 @@ import { CardApplication } from './card.application';
 import {
   buildCardRepositoryMock,
   buildJwtServiceMock,
-} from '../infrastructure/test/providers.mock';
+} from '../../common/test-utils/providers.mock';
 import {
   cardMock,
   createTokenMock,
   tokenMock,
-} from '../infrastructure/test/mocks/entities.mock';
+} from '../../common/test-utils/mocks/entities.mock';
 import { NotFoundException } from '@nestjs/common';
 
 describe('CardApplication', () => {

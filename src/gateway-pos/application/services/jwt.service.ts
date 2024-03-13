@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { ConfigService } from '../../../settings/config/config.service';
+import { ConfigService } from '../../../common/config/config.service';
 import { CreateTokenEntity } from '../../domain/entities/create-token.entity';
 
 @Injectable()
