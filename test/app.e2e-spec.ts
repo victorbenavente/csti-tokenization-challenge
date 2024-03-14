@@ -4,20 +4,21 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { generateToken } from '../src/common/test-utils/utils';
 import { createTokenMock } from '../src/common/test-utils/mocks/entities.mock';
-import { buildCardApplicationMockForE2E } from '../src/common/test-utils/providers.mock';
+import { buildRedisClientForE2EMock } from '../src/common/test-utils/providers.mock';
 import { CreateTokenDto } from '../src/gateway-pos/infrastructure/api/dtos/request/create-token.dto';
+import { RedisClient } from '../src/gateway-pos/infrastructure/db/redis.client';
 
 describe('Card Tokenization E2E', () => {
   let app: INestApplication;
-  const CardApplication = buildCardApplicationMockForE2E();
+  const redisClient = buildRedisClientForE2EMock();
   const validMerchantToken = 'Bearer pk_test_BuyK6NguwyPEuD33';
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(CardApplication)
-      .useValue(CardApplication)
+      .overrideProvider(RedisClient)
+      .useValue(redisClient)
       .compile();
 
     app = moduleRef.createNestApplication();
@@ -93,8 +94,9 @@ describe('Card Tokenization E2E', () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toEqual({
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3RvckB5YWhvby5lcyIsImNhcmRfbnVtYmVyIjoiNDIyMjUyNTY3NjA5NjEyNiIsImlhdCI6MTcxMDM1NTc0NiwiZXhwIjoxNzEwMzU1Nzc2fQ.DUwwvUBc4GufY6G77V6z8_KjZ3njEPxzB3uGpABYCWQ',
+        token: expect.stringMatching(
+          /\b[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_.+/=]+\b/,
+        ),
       });
     });
 

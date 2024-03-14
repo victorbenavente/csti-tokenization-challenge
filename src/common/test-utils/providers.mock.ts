@@ -4,7 +4,6 @@ import { CardRepository } from '../../gateway-pos/domain/repositories/card.repos
 import { ConfigService } from '../config/config.service';
 import { RedisClient } from '../../gateway-pos/infrastructure/db/redis.client';
 import { CardApplication } from '../../gateway-pos/application/card.application';
-import { cardMock, tokenMock } from './mocks/entities.mock';
 
 export const buildCardRepositoryMock = () => {
   const repository = jest.mocked<CardRepository>(CardRepository as any, {
@@ -71,11 +70,21 @@ export const buildCardApplicationMock = () => {
   return application;
 };
 
-export const buildCardApplicationMockForE2E = () => {
-  const application = jest.mocked<CardApplication>(CardApplication as any, {
+export const buildRedisClientForE2EMock = () => {
+  const client = jest.mocked<RedisClient>(RedisClient as any, {
     shallow: true,
   });
-  application.getCardInformation = jest.fn().mockResolvedValue(cardMock);
-  application.signIn = jest.fn().mockResolvedValue(tokenMock);
-  return application;
+  client.getAdapter = jest.fn().mockImplementation(() => ({
+    set: jest.fn().mockResolvedValue(true),
+    get: jest.fn().mockResolvedValue(
+      JSON.stringify({
+        cvv: '123',
+        card_number: '4557880669569760',
+        email: 'fake@gmail.com',
+        expiration_month: '08',
+        expiration_year: String(new Date().getFullYear() + 1),
+      }),
+    ),
+  }));
+  return client;
 };
