@@ -1,4 +1,4 @@
-## Description
+# CSTI Corp Code Challenge 🚀
 Backend server for manage credit card tokenization process.
 
 1. Kubernetes Infrastructure
@@ -40,53 +40,39 @@ Backend server for manage credit card tokenization process.
 ```
 
 
-## Setup tests
-
+## Setup project
 ### Requisites
- - Node.js v20 or higher
+ - Node.js **v20** or higher
+ - Kubernetes with kukectl **v1.28** or higher
+### Previous commands
+ - Install dependencies
+    ```bash
+    # Install node dependencies
+    $ npm install
 
-### Commands
+    # Run server (Optional, in the next section you will look at the steps 
+    # to deploy and run the app in local Kubernetes cluster)
+    $ npm run start
+    ```
 
+## Commands
+
+### 1. Run tests
+ ```bash
+  $ npm run test:unit:e2e
+  ```
+
+### 2. Deploy app in local Kubernetes cluster
 ```bash
-# run nvm (if you use nvm for manage node.js versions) OPTIONAL STEP!
-$ nvm use
+$ npm run k8:deploy
 
-# install dependencies
-$ npm install
-
-# run E2E tests
-$ npm run test:e2e
-
-# run unit tests
-$ npm run test
-```
-
-## Deploy on Kubernetes cluster and run application
-
-### Requisites
- - kubernetes v1.28 or higher (Minikube or Docker Desktop)
-
-### Commands
-
-```bash
-# Install ingress controller
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
-
-# Setup K8 Namespace
-$ kubectl apply -f infra/namespace.yaml
-
-# Setup Redis Instance
-$ kubectl apply -f infra/redis.yaml
-
-# Setup ConfogMap, Deployment, Service and Ingress for Backend Server
-$ kubectl apply -f infra/server.yaml
-
-# Verify all resources are running successfully
+#Verify all resources (OPTIONAL)
 $ kubectl get pods,svc,ingress -n culqi-tokenization
 ```
-  ![Imagen k8 cluster](./assets/kubernetes-cluster.png "k8 cluster")
+![Imagen k8 cluster](./assets/kubernetes-cluster.png "k8 cluster")
 
-## Documentation
+
+## API Documentation
 For see Open API documentation:
 1. Follow the previous steps to set up the Kubernetes cluster.
 1. Open a web browser ex. Chrome and go to the next url -> http://localhost/api
