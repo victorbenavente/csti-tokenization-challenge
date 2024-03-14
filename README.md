@@ -1,11 +1,11 @@
 ## Description
-Backend server for manage tokenization proccess of credit cards
+Backend server for manage credit card tokenization process.
 
 1. Kubernetes Infrastructure
 
   ![Imagen documentation](./assets/kubernetes-arquitecture.png "documentation")
 
-2. Software Architecture (Hexagonal Architecture)
+2. Software Architecture (For this project, hexagonal architecture was used)
 
 ```md
     └──src
